@@ -39,12 +39,13 @@ class LinkedList {
     return this.length;
   }
 
-    insertAnte(index, value) {
+    inputValidation(index, value){
       if(!Number.isInteger(value)){
+        alert('ERROR: Value must be a number');
         throw new TypeError('Value must be a number');
       }
 
-      if(this.length === 0 || index < 0 || index > this.length){
+      if(index < 0 || index > this.length){
         throw new RangeError('Not in list');
       }
 
@@ -68,6 +69,19 @@ class LinkedList {
         return 1;
       }
 
+      for(let i = 0; i < this.length; i++){
+        if(value === this.peek(i)){
+          alert('ERROR: The number must not be repeated');
+          throw new RangeError('The number must not be repeated');
+        }
+      }
+
+    }
+
+    insertAnte(index, value) {
+
+      this.inputValidation(index, value);
+
       const node = new ListNode(value);
       let currentNode = this.head;
       let count = 0;
@@ -87,36 +101,9 @@ class LinkedList {
     }
 
 
-
     insertPost(index, value) {
-      if(!Number.isInteger(value)){
-        throw new TypeError('Value must be a number');
-      }
 
-      if(index < 0 || index > this.length){
-        throw new RangeError('Not in list');
-      }
-
-      if(index === 0 && this.length === 0){
-        const node = new ListNode(value);
-
-        this.head = node;
-        this.tail = node;
-        this.length++;
-        return;
-      }
-
-      if(index === 0 && this.length !== 0){
-        const node = new ListNode(value);
-
-        node.next = this.head.next;
-        node.prev = this.head;
-
-        this.head.next.prev = node;
-        this.head.next = node;
-        this.length++;
-        return;
-      }
+      this.inputValidation(index, value);
 
       const node = new ListNode(value);
       let currentNode = this.head;
