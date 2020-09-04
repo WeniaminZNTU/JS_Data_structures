@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 class Stack {
   constructor(maxSize = 1000) {
@@ -49,55 +49,55 @@ class Stack {
   }
 }
 
-console.log('Task 1');
-console.log('checkBraces(\'()([<{}>])\'):',checkBraces('()([<{}>])'));
-console.log('checkBraces(\'()([<{}>]>\'):',checkBraces('()([<{}>]>'));
-console.log('checkBraces(\'()<{()}>([<{}>])\'):',checkBraces('()<{()}>([<{}>])'));
-console.log('checkBraces(\'()<{()}>[<{}>])\'):',checkBraces('()<{()}>[<{}>])'));
-console.log('checkBraces(\'()))))))))))))))\'):',checkBraces('()))))))))))))))'));
+console.log("Task 1");
+console.log("checkBraces('()([<{}>])'):", checkBraces("()([<{}>])"));
+console.log("checkBraces('()([<{}>]>'):", checkBraces("()([<{}>]>"));
+console.log(
+  "checkBraces('()<{()}>([<{}>])'):",
+  checkBraces("()<{()}>([<{}>])")
+);
+console.log("checkBraces('()<{()}>[<{}>])'):", checkBraces("()<{()}>[<{}>])"));
+console.log(
+  "checkBraces('()))))))))))))))'):",
+  checkBraces("()))))))))))))))")
+);
 
-
-
-function checkBraces(string){
-  if(string.length % 2 !== 0){
+function checkBraces(string) {
+  if (string.length % 2 !== 0) {
     return false;
   }
 
   let stack = new Stack(string.length);
 
-  let roundClosingBrackts = ')';
-  let squareClosingBrackets = ']';
-  let curlyClosingBrackets = '}';
-  let angleClosingBrackets = '>';
+  let roundClosingBrackts = ")";
+  let squareClosingBrackets = "]";
+  let curlyClosingBrackets = "}";
+  let angleClosingBrackets = ">";
 
   for (let ch of string) {
-
-    if(ch === '(' || ch === '[' || ch === '{' || ch === '<'){
+    if (ch === "(" || ch === "[" || ch === "{" || ch === "<") {
       // console.log('ch in if():',ch);
       stack.push(ch);
       // console.log('stack.peek():',stack.peek());
       continue;
-    }
-
-    else if(stack.peek() === '(' && ch === ')' || stack.peek() === '[' && ch === ']' || stack.peek() === '{' && ch === '}' || stack.peek() === '<' && ch === '>' ){
+    } else if (
+      (stack.peek() === "(" && ch === ")") ||
+      (stack.peek() === "[" && ch === "]") ||
+      (stack.peek() === "{" && ch === "}") ||
+      (stack.peek() === "<" && ch === ">")
+    ) {
       stack.pop();
-      if(stack.size < 0){
+      if (stack.size < 0) {
         return false;
       }
-    }
-
-    else{
+    } else {
       return false;
     }
   }
   return stack.isEmpty;
 }
 
-
-
-
 // Task 2
-
 class ListNode {
   constructor(value) {
     this.value = value;
@@ -106,148 +106,153 @@ class ListNode {
   }
 }
 
+// Task 2
 class LinkedList {
-  constructor(string) {
-    let numerals = string.split('');
-    numerals = numerals.map((x) => Number(x));
-    
+  constructor(...args) {
+    let numerals = [...new Set(args)];
+
     this.head = null;
     this.tail = null;
     this.length = 0;
 
+    let lastIndex = 0;
+
     for (const item of numerals) {
-      if (!Number.isInteger(item)) {
-        continue;
-      }
-
-      if (this.length === 0) {
-        const node = new ListNode(item);
-        this.head = node;
-        this.tail = node;
-        this.length++;
-      } else {
-        const newLastNode = new ListNode(item);
-
-        newLastNode.prev = this.tail;
-        this.tail.next = newLastNode;
-        this.tail = newLastNode;
-        this.length++;
-      }
+      this.insertPost(new ListNode(lastIndex++, item));
     }
+
     return this.length;
   }
 
-// Task 2
-    inputValidation(index, value){
-      if(!Number.isInteger(value)){
-        alert('ERROR: Value must be a number');
-        throw new TypeError('Value must be a number');
-      }
-
-      if(index < 0 || index > this.length){
-        throw new RangeError('Not in list');
-      }
-
-      if(index === 0 && this.length === 0){
-        const node = new ListNode(value);
-
-        this.head = node;
-        this.tail = node;
-        this.length++;
-        return;
-      }
-
-      if(index === 0 && this.length !== 0){
-        const node = new ListNode(value);
-
-        node.next = this.head;
-
-        this.head.prev = node;
-        this.head = node;
-        this.length++;
-        return 1;
-      }
-
-      for(let i = 0; i < this.length; i++){
-        if(value === this.peek(i)){
-          alert('ERROR: The number must not be repeated');
-          throw new RangeError('The number must not be repeated');
-        }
-      }
-
+  inputValidation(index, value) {
+    if (!Number.isInteger(value)) {
+      alert("ERROR: Value must be a number");
+      throw new TypeError("Value must be a number");
     }
 
-    insertAnte(index, value) {
+    if (index < 0 || index > this.length) {
+      throw new RangeError("Not in list");
+    }
 
-      this.inputValidation(index, value);
-
+    if (index === 0 && this.length === 0) {
       const node = new ListNode(value);
-      let currentNode = this.head;
-      let count = 0;
 
-      while(currentNode.next && count < index){
-        currentNode = currentNode.next;
-        count++;
-      }
-
-      node.next = currentNode;
-      node.prev = currentNode.prev;
-
-      currentNode.prev = node;
-      currentNode.prev.next = node
-
-      return ++this.length;
+      this.head = node;
+      this.tail = node;
+      this.length++;
+      return;
     }
 
-
-    insertPost(index, value) {
-
-      this.inputValidation(index, value);
-
+    if (index === 0 && this.length !== 0) {
       const node = new ListNode(value);
-      let currentNode = this.head;
-      let count = 0;
 
-      while(currentNode.next && count < index){
-        currentNode = currentNode.next;
-        count++;
-      }
+      node.next = this.head;
 
-      node.next = currentNode.next;
-      node.prev = currentNode;
-
-      currentNode.next = node;
-      currentNode.next.prev = node;
-
-      return ++this.length;
+      this.head.prev = node;
+      this.head = node;
+      this.length++;
+      return 1;
     }
 
-    peek(index=0) {
-      if(this.length === 0 || index < 0 || index > this.length){
-        throw new RangeError('Not in list');
+    for (let i = 0; i < this.length; i++) {
+      if (value === this.peek(i)) {
+        alert("ERROR: The number must not be repeated");
+        throw new RangeError("The number must not be repeated");
       }
+    }
+  }
 
-      let currentNode = this.head;
-      let count = (-1);
-      
-      while(count < index){
-        if(count + 1 === index){
-          return currentNode.value;
-        }
-        currentNode = currentNode.next;
-        count++;
-      }
+  insertAnte(index, value) {
+    this.inputValidation(index, value);
+
+    const node = new ListNode(value);
+    let currentNode = this.head;
+    let count = 0;
+
+    while (currentNode.next && count < index) {
+      currentNode = currentNode.next;
+      count++;
     }
-  
-    logValues(){
-      for(let i = 0; i < this.length; i++){
-        console.log(this.peek(i));
-      }
+
+    node.next = currentNode;
+    node.prev = currentNode.prev;
+
+    currentNode.prev = node;
+    currentNode.prev.next = node;
+
+    return ++this.length;
+  }
+
+  insertPost(index, value) {
+    this.inputValidation(index, value);
+
+    const node = new ListNode(value);
+    let currentNode = this.head;
+    let count = 0;
+
+    while (currentNode.next && count < index) {
+      currentNode = currentNode.next;
+      count++;
     }
+
+    node.next = currentNode.next;
+    node.prev = currentNode;
+
+    currentNode.next = node;
+    currentNode.next.prev = node;
+
+    return ++this.length;
+  }
+
+  peek(index = 0) {
+    if (this.length === 0 || index < 0 || index > this.length) {
+      throw new RangeError("Not in list");
+    }
+
+    let currentNode = this.head;
+    let count = -1;
+
+    while (count < index) {
+      if (count + 1 === index) {
+        return currentNode.value;
+      }
+      currentNode = currentNode.next;
+      count++;
+    }
+  }
+
+  logValues() {
+    for (let i = 1; i < this.length; i++) {
+      console.log(this.peek(i));
+    }
+  }
 }
 
-console.log('\nTask 2');
-let lim = prompt('Enter the number');
-const list = new LinkedList(lim);
-console.log(`Output numerals ${lim} number`);
+console.log("\nTask 2");
+let num = prompt("Enter the number");
+
+let list = addNumeralsFromInputNumber(num);
+
+console.log(`Output numerals ${num} number`);
 list.logValues();
+
+function addNumeralsFromInputNumber(string) {
+  let num = string.split("");
+  num = num.map((x) => Number(x));
+
+  let returnList = new LinkedList();
+
+  for (let i = 0; i < num.length; i++) {
+    for (let j = (i+1); j < num.length; j++) {
+      if (num[i] === num[j]) {
+        num.splice(j, 1);
+      }
+    }
+  }
+
+  for (let i = 0; i < num.length; i++) {
+    returnList.insertPost(i, num[i]);
+  }
+
+  return returnList;
+}
